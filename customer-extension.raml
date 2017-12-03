@@ -1,0 +1,60 @@
+#%RAML 1.0 Extension
+description: "Extension of Customer API to indicate API can expose methods to \
+  \ create, maintain, retrieve Customers order.\
+  \ Customer database model will have one-to-many association with Order \
+  \ Order model will have one-to-many association with products \
+  \ API can be extended in future (not shown in this extension) \
+  \ to add or maintain products."
+usage: Get Orders placed by customer
+version: "v2"
+extends: customer-api.raml
+schemas:
+  Order:      !include schemas/order.raml
+  Product:    !include schemas/product.raml
+  ErrorOrderNotFound: !include examples/ErrorOrderNotFound.json
+/customer/{customerId}/order/create:
+  is: [ secured: {oAuthToken : "validToken"}, allowsCrossOrigin ]
+  type: { item: {typeName: Order} }
+  uriParameters:
+    customerId:
+      description: "Customer Id"
+      type: number
+      required: true
+  post:
+    description: "Create new Order for a Customer"
+    is: [ hasRequestItem: { typeName: Order }, hasCreatedResponseItem: {typeName: Order}, hasBadRequest, hasInternalServerError, hasConflictingResource ]
+/customer/{customerId}/orders:
+  is: [ secured: {oAuthToken : "validToken"}, allowsCrossOrigin ]
+  type: { collection: { typeName: Order } }
+  uriParameters:
+    customerId:
+      description: "Customer Id"
+      type: number
+      required: true
+  get:
+    description: "Get all orders placed by a customer"
+    is: [ hasResponseCollection: { typeName: Order }, hasInternalServerError ]
+/customer/{customerId}/order/{orderId}:
+  is: [ secured: {oAuthToken : "validToken"}, allowsCrossOrigin ]
+  type: { item: { typeName: Order } }
+  uriParameters:
+    customerId:
+      description: "Customer Id"
+      type: number
+      required: true
+    orderId:
+      description: "Order Id"
+      type: number
+      required: true
+  get:
+    description: "Get order by id placed by a customer"
+    is: [ hasResponseItem: { typeName: Order }, hasNotFound, hasInternalServerError ]
+  put:
+    description: "Update an Order by id. \
+    \ Add or update new products in order, update delivery address etc. \
+    \ Product model is encapsulcated in Order model"
+    is: [ hasRequestItem: { typeName: Order }, hasNotFound, hasBadRequest, hasInternalServerError, hasConflictingResource ]
+  /cancel:
+    put:
+      description: "Cancel Order for a Customer by order Id"
+      is: [ hasRequestItem: { typeName: Order }, hasNotFound, hasBadRequest, hasInternalServerError, hasConflictingResource ]

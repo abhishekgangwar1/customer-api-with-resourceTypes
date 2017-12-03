@@ -1,0 +1,18 @@
+#%RAML 1.0 ResourceType
+uses:
+  lib: ../customer-api.raml
+  
+usage: Use this resourceType to represent any single item
+description: A single <<typeName>>
+get:
+  description: Get a <<typeName>>
+  is: [ lib.hasResponseItem: { typeName: <<typeName>> }, lib.hasNotFound, lib.hasInternalServerError ]
+put:
+  description: Update a <<typeName>>
+  is: [ lib.hasRequestItem: { typeName: <<typeName>> }, lib.hasResponseItem: { typeName: <<typeName>> }, lib.hasBadRequest, lib.hasInternalServerError, lib.hasConflictingResource ]
+delete:
+  description: Delete a <<typeName>>
+  is: [ lib.hasNotFound, lib.hasInternalServerError ]
+  responses:
+    204:
+      description: "Deleted successfully"

@@ -1,0 +1,73 @@
+#%RAML 1.0
+title: "Customer Maintanance"
+description: "Customer API is designed to Create and maintain customer records in\
+  \ the system. Customer API can be enhanced to handle Orders with each order having\
+  \ certain products. For example, Customer submits an Order of Products. Customer\
+  \ model will have one to many association with Order model and Order will have one\
+  \ to many association with Products.\n\n* Customer can will expose methods to retreive\
+  \ Customers order.\n* Order API can expose methods to create and  maintain Order\
+  \ with each Order linking back to Customer.\n* Product API can be used to create\
+  \ and maintain products."
+version: "v1"
+protocols: [  HTTP, HTTPS ]
+baseUri: "http://{environment}.customer-api.com.au/{version}"
+baseUriParameters:
+  environment:
+    type: string
+    enum: [ "dev", "sit", "uat", "preprod", "prod" ]
+mediaType: [ application/json ]
+resourceTypes:
+  collection: !include resourceTypes/collection.raml
+  item: !include resourceTypes/item.raml
+schemas:
+  Customer:   !include schemas/customer.raml
+  Error:      !include schemas/error.raml
+traits:
+  secured:       !include traits/headerAuthorizationOAuth.raml
+  allowsCrossOrigin:   !include traits/headerAllowCrossOrigin.raml
+  notCached:     !include traits/headerCacheControl.raml
+  hasResponseCollection:     !include traits/hasResponseCollection.raml
+  hasRequestItem: !include traits/hasRequestItem.raml
+  hasCreatedResponseItem: !include traits/hasCreatedResponseItem.raml
+  hasResponseItem:     !include traits/hasResponseItem.raml
+  hasNotFound:         !include traits/hasNotFound.raml
+  hasBadRequest:         !include traits/hasBadRequest.raml
+  hasConflictingResource:     !include traits/hasConflictingResource.raml
+  hasInternalServerError:     !include traits/hasInternalServerError.raml
+securitySchemes:
+  oauth_2_0: !include securitySchemes/oAuthSecurityScheme.raml
+securedBy:
+- oauth_2_0:
+    scopes: ["read", "write"]
+/customers:
+  is: [ secured: {oAuthToken : "validToken"}, allowsCrossOrigin, notCached ]
+  type: { collection: { typeName: Customer } }
+  get:
+    queryParameters:
+      firstName?: string
+  /firstName/{firstName}:
+    get:
+      description: List all Customers with a first name
+      is: [ hasResponseCollection: { typeName: Customer }, hasInternalServerError ]
+/customer:
+  is: [ secured: {oAuthToken : "validToken"}, allowsCrossOrigin ]
+  type: { item: {typeName: Customer} }
+  post:
+    description: "Create new Customer"
+    is: [ hasRequestItem: { typeName: Customer }, hasCreatedResponseItem: {typeName: Customer}, hasBadRequest, hasInternalServerError, hasConflictingResource ]
+  /{id}:
+    is: [ secured: {oAuthToken : "validToken"}, allowsCrossOrigin ]
+    type: { item: {typeName: Customer} }
+    uriParameters:
+      id:
+        type: string
+        required: true
+    get:
+      description: "Get Customer by id"
+      is: [ hasResponseItem: { typeName: Customer }, hasNotFound, hasInternalServerError ]
+    delete:
+      description: "Delete Customer by id"
+      is: [ hasNotFound, hasInternalServerError ]
+    put:
+      description: "Update a Customer by id"
+      is: [ hasRequestItem: { typeName: Customer }, hasNotFound, hasBadRequest, hasInternalServerError, hasConflictingResource ]

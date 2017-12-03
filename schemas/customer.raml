@@ -1,0 +1,27 @@
+#%RAML 1.0 DataType
+type: object
+description: "Customer model which can be later enchanced to include other customer\
+  \ details, for example, DOB"
+properties:
+  id:
+    type: number
+    minimum: 1
+    maximum: 999999999999999
+  firstName:
+    type: string
+    maxLength: 35
+  lastName:
+    type: string
+    maxLength: 35
+  streetAddress:
+    type: string
+    maxLength: 100
+  suburb:
+    type: string
+    maxLength: 50
+  state:
+    type: string
+    maxLength: 35
+  postcode:
+    type: string
+    maxLength: 6

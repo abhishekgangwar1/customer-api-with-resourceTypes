@@ -1,0 +1,9 @@
+{
+	"id": 1,
+	"orderDate": "2002-10-02T15:00:00Z",
+	"orderStatus": "Processing",
+	"products": [{
+		"id": 1,
+		"name": "iPhone"
+	}]
+}

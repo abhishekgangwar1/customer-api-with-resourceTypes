@@ -1,0 +1,14 @@
+#%RAML 1.0 ResourceType
+uses:
+  lib: ../customer-api.raml
+
+usage: Use this resourceType to represent any collection of items
+description: A collection of <<resourcePathName>>
+
+get:
+  description: |
+    Get all <<resourcePathName>>, optionally filtered
+  is: [ lib.hasResponseCollection: { typeName: <<typeName>> }, lib.hasInternalServerError ]
+post:
+  description: Create a new <<resourcePathName| !singularize>>
+  is: [ lib.hasRequestItem: { typeName: <<typeName>> }, lib.hasCreatedResponseItem: { typeName: <<typeName>> }, lib.hasBadRequest, lib.hasInternalServerError, lib.hasConflictingResource ]

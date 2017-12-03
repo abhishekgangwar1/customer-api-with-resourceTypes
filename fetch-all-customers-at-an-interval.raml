@@ -1,0 +1,19 @@
+#%RAML 1.0 Overlay
+usage: Indicates that customer API should be monitored
+extends: customer-api.raml
+annotationTypes:
+  monitor:
+    properties:
+      frequency:
+        properties:
+          interval: integer
+          unitOfMeasure:
+            enum: [ seconds, minutes, hours ]
+      script:
+/customers:
+  get:
+    (monitor):
+      frequency:
+        interval: 5
+        unitOfMeasure: minutes
+      script: fetchAllCustomers

@@ -1,0 +1,10 @@
+#%RAML 1.0 Trait
+responses:
+  500:
+    description: "Some server side error occurred."
+    body:
+      application/json:
+        schema: !include ../schemas/error.raml
+        example:
+          value: !include ../examples/ErrorInternalServer.json
+          strict: false

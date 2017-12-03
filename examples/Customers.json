@@ -1,0 +1,22 @@
+[
+	{
+		"id": 1,
+		"firstName": "John",
+		"lastName": "Easy",
+		"streetAddress": "1 High Street",
+		"suburb": "Sydney",
+		"state": "NSW",
+		"postcode": "2000"
+	}
+,
+{
+	"id": 2,
+	"firstName": "Sean",
+	"lastName": "Tough",
+	"streetAddress": "1 Low Street",
+	"suburb": "Melbourne",
+	"state": "VIC",
+	"postcode": "3000"
+}
+
+	]

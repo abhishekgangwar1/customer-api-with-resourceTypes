@@ -1,0 +1,10 @@
+#%RAML 1.0 Trait
+responses:
+  400:
+    description: "Request syntactically incorrect. Look for details in the response payload."
+    body:
+      application/json:
+        schema: !include ../schemas/error.raml
+        example:
+          value: !include ../examples/ErrorBadRequest.json
+          strict: false

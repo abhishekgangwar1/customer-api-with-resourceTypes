@@ -1,0 +1,9 @@
+{
+	"id": 1,
+	"firstName": "John",
+	"lastName": "Easy",
+	"streetAddress": "1 High Street",
+	"suburb": "Sydney",
+	"state": "NSW",
+	"postcode": "2000"
+}

@@ -1,0 +1,13 @@
+#%RAML 1.0 Trait
+responses:
+  200:
+    description: "Successful response e.g. examples/Customers.json, examples/Orders.json"
+    body:
+      application/json:
+        type: "array"
+        uniqueItems: true
+        maxItems: 100
+        items:
+          type: <<typeName>>
+          description: "Limit paging to 100 customers per page and customers can\
+            \ be sorted in asc or desc order of creation or modification"
